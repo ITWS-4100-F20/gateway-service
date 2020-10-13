@@ -1,0 +1,209 @@
+---
+swagger: "2.0"
+info:
+  description: "API Documentation for the oversale solicitation project"
+  version: "1.0.0"
+  title: "Oversale Solicitation API"
+  contact:
+    email: "deahln@rpi.edu"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "localhost:3000"
+basePath: "/api"
+tags:
+- name: "Users"
+  description: "User management and authentication"
+schemes:
+- "http"
+paths:
+  /users:
+    get:
+      tags:
+      - "Users"
+      summary: "get list of users"
+      description: "Retrieves a list of all current users in the system including\
+        \ information about them"
+      operationId: "get_users"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "filterBy"
+        in: "query"
+        description: "optional argument to filter by regular users or agents"
+        required: false
+        type: "string"
+        enum:
+        - "users"
+        - "agents"
+      responses:
+        "200":
+          description: "list of all users"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
+        "400":
+          description: "Generic error response"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    post:
+      tags:
+      - "Users"
+      summary: "create a user"
+      description: "Creates new user in the system with given information"
+      operationId: "create_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "user to create"
+        required: false
+        schema:
+          $ref: "#/definitions/CreateUser"
+      responses:
+        "200":
+          description: "User creation success"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Generic error response"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    put:
+      tags:
+      - "Users"
+      summary: "edit a user"
+      description: "Modifies user information"
+      operationId: "edit_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "user to create"
+        required: false
+        schema:
+          $ref: "#/definitions/CreateUser"
+      responses:
+        "200":
+          description: "User creation success"
+          schema:
+            $ref: "#/definitions/User"
+        "400":
+          description: "Generic error response"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+    delete:
+      tags:
+      - "Users"
+      summary: "delete a user"
+      description: "deletes an existing user"
+      operationId: "delete_user"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "user"
+        description: "user to remove"
+        required: false
+        schema:
+          $ref: "#/definitions/user"
+      responses:
+        "200":
+          description: "Successful response"
+          schema:
+            $ref: "#/definitions/Success"
+        "400":
+          description: "Generic error response"
+          schema:
+            $ref: "#/definitions/Error"
+      x-swagger-router-controller: "swagger_server.controllers.users_controller"
+definitions:
+  Error:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "number"
+        example: 400
+      message:
+        type: "string"
+  Success:
+    type: "object"
+    required:
+    - "code"
+    - "message"
+    properties:
+      code:
+        type: "number"
+        example: 200
+      message:
+        type: "string"
+        example: "success"
+    example:
+      code: 200
+      message: "success"
+  User:
+    type: "object"
+    properties:
+      userid:
+        type: "string"
+        format: "uuid"
+        example: "507f1f77bcf86cd799439011"
+      username:
+        type: "string"
+        example: "united-user"
+      email:
+        type: "string"
+        format: "email"
+        example: "user@mail.com"
+      firstName:
+        type: "string"
+        example: "John"
+      lastName:
+        type: "string"
+        example: "Doe"
+    example:
+      firstName: "John"
+      lastName: "Doe"
+      userid: "507f1f77bcf86cd799439011"
+      email: "user@mail.com"
+      username: "united-user"
+  CreateUser:
+    type: "object"
+    properties:
+      firstName:
+        type: "string"
+      lastName:
+        type: "string"
+      username:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+      password:
+        type: "string"
+        format: "password"
+  user:
+    type: "object"
+    properties:
+      userid:
+        type: "string"
+        format: "uuid"
+        example: "507f1f77bcf86cd799439011"
+responses:
+  SuccessResponse:
+    description: "Successful response"
+    schema:
+      $ref: "#/definitions/Success"
+  ErrorResponse:
+    description: "Generic error response"
+    schema:
+      $ref: "#/definitions/Error"
