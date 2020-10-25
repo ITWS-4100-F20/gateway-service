@@ -1,101 +1,106 @@
----
-swagger: "2.0"
+openapi: 3.0.1
 info:
-  description: "API Documentation for the oversale solicitation project"
-  version: "1.0.0"
-  title: "Oversale Solicitation API"
+  title: Oversale Solicitation API
+  description: API Documentation for the oversale solicitation project
   contact:
-    email: "deahln@rpi.edu"
+    email: deahln@rpi.edu
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "localhost:3030"
-basePath: "/api"
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: http://localhost:3000/api
 tags:
-- name: "Users"
-  description: "User management and authentication"
-- name: "System"
-  description: "System-level api calls for health"
-schemes:
-- "http"
+- name: Users
+  description: User management and authentication
+- name: System
+  description: System-level api calls for health
 paths:
   /ping:
     get:
       tags:
-      - "System"
-      summary: "Check if system is up and running"
-      description: "Pings the server to check for a healthy response"
-      operationId: "ping_server"
-      produces:
-      - "application/json"
-      parameters: []
+      - System
+      summary: Check if system is up and running
+      description: Pings the server to check for a healthy response
+      operationId: ping_server
       responses:
         "200":
-          description: "successful ping"
-      x-swagger-router-controller: "swagger_server.controllers.system_controller"
+          description: successful ping
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.system_controller
   /currentUser:
     get:
       tags:
-      - "Users"
-      summary: "gets currently authenticated user"
-      description: "Retrieves information about the current user from the microsoft\
-        \ Graph API"
-      operationId: "get_users"
-      produces:
-      - "application/json"
-      parameters: []
+      - Users
+      summary: gets currently authenticated user
+      description: Retrieves information about the current user from the microsoft
+        Graph API
+      operationId: get_users
       responses:
         "200":
-          description: "list of all users"
+          description: list of all users
+          content: {}
         "400":
-          description: "Generic error response"
-          schema:
-            $ref: "#/definitions/Error"
+          description: Generic error response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       security:
       - OAuth2:
-        - "openid"
-      x-swagger-router-controller: "swagger_server.controllers.users_controller"
-securityDefinitions:
-  OAuth2:
-    type: "oauth2"
-    authorizationUrl: "https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/oauth2/v2.0/authorize"
-    x-tokenInfoFunc: swagger_server.__main__._get_token_from_cache
-    flow: "implicit"
-    scopes:
-      openid: "Grants profile access"
-definitions:
-  Error:
-    type: "object"
-    required:
-    - "code"
-    - "message"
-    properties:
-      code:
-        type: "number"
-        example: 400
-      message:
-        type: "string"
-  Success:
-    type: "object"
-    required:
-    - "code"
-    - "message"
-    properties:
-      code:
-        type: "number"
-        example: 200
-      message:
-        type: "string"
-        example: "success"
-    example:
-      code: 200
-      message: "success"
-responses:
-  SuccessResponse:
-    description: "Successful response"
-    schema:
-      $ref: "#/definitions/Success"
-  ErrorResponse:
-    description: "Generic error response"
-    schema:
-      $ref: "#/definitions/Error"
+        - openid
+      x-swagger-router-controller: swagger_server.controllers.users_controller
+      x-openapi-router-controller: swagger_server.controllers.users_controller
+components:
+  schemas:
+    Error:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: number
+          example: 400
+        message:
+          type: string
+    Success:
+      required:
+      - code
+      - message
+      type: object
+      properties:
+        code:
+          type: number
+          example: 200
+        message:
+          type: string
+          example: success
+      example:
+        code: 200
+        message: success
+  responses:
+    ErrorResponse:
+      description: Generic error response
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/Error'
+    SuccessResponse:
+      description: Successful response
+      content:
+        '*/*':
+          schema:
+            $ref: '#/components/schemas/Success'
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/oauth2/v2.0/token
+          scopes:
+            openid: Grants profile access
+      x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_OAuth2
+      x-scopeValidateFunc: swagger_server.controllers.authorization_controller.validate_scope_OAuth2
+
