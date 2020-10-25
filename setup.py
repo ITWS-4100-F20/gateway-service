@@ -24,10 +24,10 @@ setup(
     keywords=["Swagger", "Oversale Solicitation API"],
     install_requires=REQUIRES,
     packages=find_packages(),
-    package_data={'': ['swagger/swagger.yaml']},
+    package_data={'': ['swagger.yaml']},
     include_package_data=True,
     entry_points={
-        'console_scripts': ['swagger_server=swagger_server.__main__:main']},
+        'console_scripts': ['server=swagger_server.__main__:main']},
     long_description="""\
     API Documentation for the oversale solicitation project
     """
