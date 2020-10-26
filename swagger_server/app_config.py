@@ -26,3 +26,5 @@ ENDPOINT = 'https://graph.microsoft.com/v1.0/users'  # This resource requires no
 SCOPE = ["User.ReadBasic.All"]
 
 SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in server-side session
+
+JWK_URI = "https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/discovery/v2.0/keys"

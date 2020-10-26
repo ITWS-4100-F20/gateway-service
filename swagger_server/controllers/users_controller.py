@@ -3,7 +3,7 @@ import six
 
 from swagger_server.models.error import Error  # noqa: E501
 from swagger_server import util
-
+from ..utils import auth
 
 def get_users():  # noqa: E501
     """gets currently authenticated user
@@ -13,4 +13,5 @@ def get_users():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    authHeader = connexion.request.headers.get('authorization')
+    return auth.tokenInfo(authHeader.split()[1])
