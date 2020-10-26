@@ -96,9 +96,8 @@ components:
     OAuth2:
       type: oauth2
       flows:
-        authorizationCode:
+        implicit:
           authorizationUrl: https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/oauth2/v2.0/authorize
-          tokenUrl: https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/oauth2/v2.0/token
           scopes:
             openid: Grants profile access
       x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_OAuth2
