@@ -15,6 +15,14 @@ tags:
   description: User management and authentication
 - name: System
   description: System-level api calls for health
+- name: Data
+  description: Database insertion and management
+- name: Model
+  description: Machine learning model and analytics
+- name: Simulation
+  description: Control and status of simulations
+- name: Bid
+  description: Endpoints for the prototype interface
 paths:
   /ping:
     get:
@@ -27,6 +35,7 @@ paths:
         "200":
           description: successful ping
           content: {}
+      x-swagger-router-controller: swagger_server.controllers.system_controller
       x-openapi-router-controller: swagger_server.controllers.system_controller
   /currentUser:
     get:
@@ -51,6 +60,165 @@ paths:
         - User.ReadBasic.All
       x-swagger-router-controller: swagger_server.controllers.users_controller
       x-openapi-router-controller: swagger_server.controllers.users_controller
+  /data:
+    summary: Controls the storage, listing, control, and retrieval of data from the
+      simulation engine.
+    get:
+      tags:
+      - Data
+      summary: Get data of scheme type
+      operationId: get_data
+      responses:
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.data_controller
+    put:
+      tags:
+      - Data
+      summary: Add data scheme
+      operationId: put_add_scheme
+      responses:
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.data_controller
+    post:
+      tags:
+      - Data
+      summary: Add data of scheme type
+      operationId: post_add_data
+      responses:
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.data_controller
+    delete:
+      tags:
+      - Data
+      summary: Delete data of scheme type
+      operationId: delete_data
+      responses:
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.data_controller
+    options:
+      tags:
+      - Data
+      summary: Lists all data shemes
+      operationId: get_data_schemes
+      responses:
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.data_controller
+  /model:
+    summary: Controls models
+    get:
+      tags:
+      - Model
+      summary: gets model of id
+      operationId: get_model
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+    put:
+      tags:
+      - Model
+      summary: Adds new model
+      operationId: put_model
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+    post:
+      tags:
+      - Model
+      summary: Adds new version of model of id
+      operationId: post_model
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+    delete:
+      tags:
+      - Model
+      summary: Deletes model of id
+      operationId: delete_model
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+    options:
+      tags:
+      - Model
+      summary: Gets all models
+      operationId: options_model
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+  /simulation:
+    summary: Manages simulations
+    get:
+      tags:
+      - Simulation
+      summary: Lists simulations with no id. With id it returns data for simulation
+      operationId: get_simulation
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+    post:
+      tags:
+      - Simulation
+      summary: Creates new simulation. Starts simulation if given id.
+      operationId: post_simulation
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+    options:
+      tags:
+      - Simulation
+      summary: Shows simulation types and options
+      operationId: options_simulation
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /bid:
+    summary: Controls bidding
+    get:
+      tags:
+      - Bid
+      summary: Gets current bid estimate and data with user id.
+      operationId: get_bid
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.bid_controller
+    post:
+      tags:
+      - Bid
+      summary: Posts bid to server. Returns accepted or denied states.
+      operationId: post_bid
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.bid_controller
 components:
   schemas:
     Error:
