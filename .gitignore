@@ -1,3 +1,5 @@
 .vscode
 
 flask_session/
+*.pyc
+*.pyo
