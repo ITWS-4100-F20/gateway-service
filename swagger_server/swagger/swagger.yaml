@@ -21,6 +21,8 @@ tags:
   description: Machine learning model and analytics
 - name: Simulation
   description: Control and status of simulations
+- name: Scenario
+  description: Defines and controls a scenario
 - name: Bid
   description: Endpoints for the prototype interface
 paths:
@@ -68,7 +70,46 @@ paths:
       - Data
       summary: Get data of scheme type
       operationId: get_data
+      parameters:
+      - name: id
+        in: query
+        description: id of schema
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: uuid
+      - name: amount
+        in: query
+        description: amount of data
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: filters
+        in: query
+        description: column specific filters (..:columnname,value)
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
       responses:
+        "200":
+          description: Rows Returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataRow'
+                x-content-type: application/json
+        "404":
+          description: No data found
         default:
           description: Default error sample response
       security:
@@ -80,7 +121,20 @@ paths:
       - Data
       summary: Add data scheme
       operationId: put_add_scheme
+      parameters:
+      - name: schema
+        in: query
+        description: schema json
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/DataSchema'
       responses:
+        "200":
+          description: Scheme successfully added.
+        "400":
+          description: Invalid input
         default:
           description: Default error sample response
       security:
@@ -92,7 +146,31 @@ paths:
       - Data
       summary: Add data of scheme type
       operationId: post_add_data
+      parameters:
+      - name: id
+        in: query
+        description: id of schema
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: uuid
+      - name: data
+        in: query
+        description: data to be added
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
+        "200":
+          description: Rows effected
+        "404":
+          description: Schema doesnt exist
+        "500":
+          description: Data is improper
         default:
           description: Default error sample response
       security:
@@ -104,7 +182,26 @@ paths:
       - Data
       summary: Delete data of scheme type
       operationId: delete_data
+      parameters:
+      - name: id
+        in: query
+        description: id of schema
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          format: uuid
       responses:
+        "200":
+          description: Rows effected
+          content:
+            application/json:
+              schema:
+                type: integer
+                x-content-type: application/json
+        "404":
+          description: Failure to find schema
         default:
           description: Default error sample response
       security:
@@ -117,6 +214,15 @@ paths:
       summary: Lists all data shemes
       operationId: get_data_schemes
       responses:
+        "200":
+          description: A list of schemas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DataSchema'
+                x-content-type: application/json
         default:
           description: Default error sample response
       security:
@@ -199,6 +305,26 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /scenario:
+    summary: Manages scenarios
+    get:
+      tags:
+      - Scenario
+      summary: Lists scenarios with no id. With id it returns data for scenario
+      operationId: get_scenario
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.scenario_controller
+    post:
+      tags:
+      - Scenario
+      summary: Creates new scenario
+      operationId: post_scenario
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.scenario_controller
   /bid:
     summary: Controls bidding
     get:
@@ -247,6 +373,47 @@ components:
       example:
         code: 200
         message: success
+    DataSchema:
+      required:
+      - id
+      - name
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 055f27bb-8372-45ef-b3ff-336ab062661c
+        name:
+          type: string
+          example: Aircraft
+        fields:
+          $ref: '#/components/schemas/DataRow'
+      example:
+        id: 055f27bb-8372-45ef-b3ff-336ab062661c
+        name: Aircraft
+        fields: '[{a: b}, {c: d}]'
+    DataRow:
+      type: object
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataRow_fields'
+      example:
+        fields:
+        - field: field
+          value: value
+        - field: field
+          value: value
+    DataRow_fields:
+      properties:
+        field:
+          type: string
+        value:
+          type: string
+      example:
+        field: field
+        value: value
   responses:
     ErrorResponse:
       description: Generic error response
