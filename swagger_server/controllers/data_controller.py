@@ -73,5 +73,5 @@ def put_add_scheme(schema):  # noqa: E501
     :rtype: None
     """
     if connexion.request.is_json:
-        schema = DataRow.from_dict(connexion.request.get_json())  # noqa: E501
+        schema = DataSchema.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'

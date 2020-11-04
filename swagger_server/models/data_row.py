@@ -59,5 +59,7 @@ class DataRow(Model):
         :param fields: The fields of this DataRow.
         :type fields: List[DataRowFields]
         """
+        if fields is None:
+            raise ValueError("Invalid value for `fields`, must not be `None`")  # noqa: E501
 
         self._fields = fields

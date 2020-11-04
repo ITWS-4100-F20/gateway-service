@@ -163,7 +163,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: string
+          $ref: '#/components/schemas/Data'
       responses:
         "200":
           description: Rows effected
@@ -375,6 +375,7 @@ components:
         message: success
     DataSchema:
       required:
+      - fields
       - id
       - name
       type: object
@@ -382,17 +383,13 @@ components:
         id:
           type: string
           format: uuid
-          example: 055f27bb-8372-45ef-b3ff-336ab062661c
         name:
           type: string
-          example: Aircraft
         fields:
           $ref: '#/components/schemas/DataRow'
-      example:
-        id: 055f27bb-8372-45ef-b3ff-336ab062661c
-        name: Aircraft
-        fields: '[{a: b}, {c: d}]'
     DataRow:
+      required:
+      - fields
       type: object
       properties:
         fields:
@@ -402,18 +399,34 @@ components:
       example:
         fields:
         - field: field
+          datatype: datatype
           value: value
         - field: field
+          datatype: datatype
           value: value
+    Data:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Data_data'
     DataRow_fields:
       properties:
         field:
+          type: string
+        datatype:
           type: string
         value:
           type: string
       example:
         field: field
+        datatype: datatype
         value: value
+    Data_data:
+      properties:
+        data:
+          $ref: '#/components/schemas/DataRow'
   responses:
     ErrorResponse:
       description: Generic error response
