@@ -12,4 +12,4 @@ def ping_server():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    return 'Active!'

@@ -14,24 +14,29 @@ class DataRowFields(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, field: str=None, value: str=None):  # noqa: E501
+    def __init__(self, field: str=None, datatype: str=None, value: str=None):  # noqa: E501
         """DataRowFields - a model defined in Swagger
 
         :param field: The field of this DataRowFields.  # noqa: E501
         :type field: str
+        :param datatype: The datatype of this DataRowFields.  # noqa: E501
+        :type datatype: str
         :param value: The value of this DataRowFields.  # noqa: E501
         :type value: str
         """
         self.swagger_types = {
             'field': str,
+            'datatype': str,
             'value': str
         }
 
         self.attribute_map = {
             'field': 'field',
+            'datatype': 'datatype',
             'value': 'value'
         }
         self._field = field
+        self._datatype = datatype
         self._value = value
 
     @classmethod
@@ -65,6 +70,27 @@ class DataRowFields(Model):
         """
 
         self._field = field
+
+    @property
+    def datatype(self) -> str:
+        """Gets the datatype of this DataRowFields.
+
+
+        :return: The datatype of this DataRowFields.
+        :rtype: str
+        """
+        return self._datatype
+
+    @datatype.setter
+    def datatype(self, datatype: str):
+        """Sets the datatype of this DataRowFields.
+
+
+        :param datatype: The datatype of this DataRowFields.
+        :type datatype: str
+        """
+
+        self._datatype = datatype
 
     @property
     def value(self) -> str:
