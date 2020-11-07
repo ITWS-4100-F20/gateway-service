@@ -6,7 +6,7 @@ from datetime import date, datetime  # noqa: F401
 from typing import List, Dict  # noqa: F401
 
 from swagger_server.models.base_model_ import Model
-from swagger_server.models.data_data import DataData  # noqa: F401,E501
+from swagger_server.models.data_row import DataRow  # noqa: F401,E501
 from swagger_server import util
 
 
@@ -15,14 +15,14 @@ class Data(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, data: List[DataData]=None):  # noqa: E501
+    def __init__(self, data: List[DataRow]=None):  # noqa: E501
         """Data - a model defined in Swagger
 
         :param data: The data of this Data.  # noqa: E501
-        :type data: List[DataData]
+        :type data: List[DataRow]
         """
         self.swagger_types = {
-            'data': List[DataData]
+            'data': List[DataRow]
         }
 
         self.attribute_map = {
@@ -42,22 +42,22 @@ class Data(Model):
         return util.deserialize_model(dikt, cls)
 
     @property
-    def data(self) -> List[DataData]:
+    def data(self) -> List[DataRow]:
         """Gets the data of this Data.
 
 
         :return: The data of this Data.
-        :rtype: List[DataData]
+        :rtype: List[DataRow]
         """
         return self._data
 
     @data.setter
-    def data(self, data: List[DataData]):
+    def data(self, data: List[DataRow]):
         """Sets the data of this Data.
 
 
         :param data: The data of this Data.
-        :type data: List[DataData]
+        :type data: List[DataRow]
         """
 
         self._data = data

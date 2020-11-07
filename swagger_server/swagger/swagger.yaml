@@ -71,15 +71,14 @@ paths:
       summary: Get data of scheme type
       operationId: get_data
       parameters:
-      - name: id
+      - name: name
         in: query
-        description: id of schema
+        description: name of schema
         required: true
         style: form
         explode: true
         schema:
           type: string
-          format: uuid
       - name: amount
         in: query
         description: amount of data
@@ -144,15 +143,14 @@ paths:
       summary: Add data of scheme type
       operationId: post_add_data
       parameters:
-      - name: id
+      - name: name
         in: query
-        description: id of schema
+        description: name of schema
         required: true
         style: form
         explode: true
         schema:
           type: string
-          format: uuid
       requestBody:
         content:
           application/json:
@@ -178,15 +176,14 @@ paths:
       summary: Delete data of scheme type
       operationId: delete_data
       parameters:
-      - name: id
+      - name: name
         in: query
-        description: id of schema
+        description: name of schema
         required: true
         style: form
         explode: true
         schema:
           type: string
-          format: uuid
       responses:
         "200":
           description: Rows effected
@@ -370,8 +367,8 @@ components:
         message: success
     DataSchema:
       required:
-      - fields
       - id
+      - fields
       - name
       type: object
       properties:
@@ -416,7 +413,7 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/Data_data'
+            $ref: '#/components/schemas/DataRow'
     DataRow_fields:
       properties:
         field:
@@ -429,10 +426,6 @@ components:
         field: field
         datatype: datatype
         value: value
-    Data_data:
-      properties:
-        data:
-          $ref: '#/components/schemas/DataRow'
   responses:
     ErrorResponse:
       description: Generic error response
