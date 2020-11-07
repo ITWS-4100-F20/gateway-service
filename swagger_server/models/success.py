@@ -14,7 +14,6 @@ class Success(Model):
 
     Do not edit the class manually.
     """
-
     def __init__(self, code: float=None, message: str=None):  # noqa: E501
         """Success - a model defined in Swagger
 
@@ -32,7 +31,6 @@ class Success(Model):
             'code': 'code',
             'message': 'message'
         }
-
         self._code = code
         self._message = message
 

@@ -121,15 +121,12 @@ paths:
       - Data
       summary: Add data scheme
       operationId: put_add_scheme
-      parameters:
-      - name: schema
-        in: query
-        description: schema json
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DataSchema'
         required: true
-        style: form
-        explode: true
-        schema:
-          $ref: '#/components/schemas/DataSchema'
       responses:
         "200":
           description: Scheme successfully added.
@@ -156,14 +153,12 @@ paths:
         schema:
           type: string
           format: uuid
-      - name: data
-        in: query
-        description: data to be added
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Data'
         required: true
-        style: form
-        explode: true
-        schema:
-          $ref: '#/components/schemas/Data'
       responses:
         "200":
           description: Rows effected
@@ -387,6 +382,17 @@ components:
           type: string
         fields:
           $ref: '#/components/schemas/DataRow'
+      example:
+        name: name
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        fields:
+          fields:
+          - field: field
+            datatype: datatype
+            value: value
+          - field: field
+            datatype: datatype
+            value: value
     DataRow:
       required:
       - fields
