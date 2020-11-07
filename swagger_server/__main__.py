@@ -18,11 +18,13 @@ Session(flask_app)
 app.add_api('swagger.yaml', strict_validation=True, options={ "swagger_ui_config": {"oauth2RedirectUrl": "http://localhost:3030/api/ui/oauth2-redirect.html"}} )
 flask_app.json_encoder = encoder.JSONEncoder
 
+"""
 #start database connection
 if(database.CreateConnection(app_config.MONGO_CONNECTION_STRING)):
     print("Successfuly connected to DB")
 else:
     print("There were problems connecting to the DB")
+"""
 
 if __name__ == '__main__':
     app.run(port=3030)
