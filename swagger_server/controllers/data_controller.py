@@ -5,6 +5,7 @@ from swagger_server.models.data import Data  # noqa: E501
 from swagger_server.models.data_row import DataRow  # noqa: E501
 from swagger_server.models.data_schema import DataSchema  # noqa: E501
 from swagger_server import util
+from swagger_server.utils.database import client as db
 
 
 def delete_data(id):  # noqa: E501
@@ -75,7 +76,15 @@ def put_add_scheme(body):  # noqa: E501
 
     :rtype: None
     """
-    print("running")
+    
     if connexion.request.is_json:
         body = DataSchema.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+
+    database = db["simulation_data"]
+    if not body.id in database.list_collection_names():
+        newcol = database[body.id]
+        schema = database["schema"]
+        schema.insert_one(body.to_dict())
+    else:
+        return 'Schema Exists', 400
+    return 'Worked'

@@ -29,4 +29,4 @@ SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in ser
 
 JWK_URI = "https://login.microsoftonline.com/aaf653e1-0bcd-4c2c-8658-12eb03e15774/discovery/v2.0/keys"
 
-MONGO_CONNECTION_STRING="mongodb://itws4500-f20-group5:udJZs6v8a78yVXPspuJs095HjIVhyJQw0myL6jX0pjnggfvwN2NgajyxLdDcNOpzxdZKOGtmJ3Vy6P8ROHOmag==@itws4500-f20-group5.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@itws4500-f20-group5@"
+MONGO_CONNECTION_STRING="mongodb://itws4500-f20-group5:udJZs6v8a78yVXPspuJs095HjIVhyJQw0myL6jX0pjnggfvwN2NgajyxLdDcNOpzxdZKOGtmJ3Vy6P8ROHOmag==@itws4500-f20-group5.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&maxIdleTimeMS=120000&retrywrites=false&appName=@itws4500-f20-group5@"
