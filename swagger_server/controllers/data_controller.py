@@ -60,19 +60,6 @@ def get_data(name, amount=None, filters=None):  # noqa: E501
     except:
         return 'Failed', 400
 
-
-def get_data_schemes():  # noqa: E501
-    """Lists all data shemes
-
-     # noqa: E501
-
-
-    :rtype: List[DataSchema]
-    """
-    schema = client["simulation_data"]["schema"].find({})
-    return schema
-
-
 def post_add_data(body, name):  # noqa: E501
     """Add data of scheme type
 
@@ -85,6 +72,7 @@ def post_add_data(body, name):  # noqa: E501
 
     :rtype: None
     """
+    print("retrieved")
     if connexion.request.is_json:
         body = Data.from_dict(connexion.request.get_json())  # noqa: E501
 
