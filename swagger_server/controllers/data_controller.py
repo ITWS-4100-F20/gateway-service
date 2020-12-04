@@ -72,7 +72,6 @@ def post_add_data(body, name):  # noqa: E501
 
     :rtype: None
     """
-    print("retrieved")
     if connexion.request.is_json:
         body = Data.from_dict(connexion.request.get_json())  # noqa: E501
 

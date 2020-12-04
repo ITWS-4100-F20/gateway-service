@@ -63,6 +63,44 @@ paths:
       x-swagger-router-controller: swagger_server.controllers.users_controller
       x-openapi-router-controller: swagger_server.controllers.users_controller
   /schema:
+    post:
+      tags:
+      - Schema
+      summary: Add data of scheme type with csv format.
+      operationId: post_schema_data
+      parameters:
+      - name: name
+        in: query
+        description: name of schema
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          text/plain:
+            schema:
+              type: string
+              example:
+                "cola,colb,colc\ntype1,type2,type3\ndata1,data2,data3\n..."
+                
+        required: true
+        description:
+          "First row is column names, second row is data types, remaining are rows of data"
+      responses:
+        "200":
+          description: Rows effected
+        "404":
+          description: Schema doesnt exist
+        "500":
+          description: Data is improper
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.schema_controller
     get:
       tags:
       - Data
