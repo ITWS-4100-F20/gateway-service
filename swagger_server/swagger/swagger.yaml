@@ -261,8 +261,11 @@ paths:
       - OAuth2:
         - User.ReadBasic.All
       x-openapi-router-controller: swagger_server.controllers.data_controller
+
+
   /model:
     summary: Controls models
+
     get:
       tags:
       - Model
@@ -281,6 +284,8 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
+
+
     post:
       tags:
       - Model
@@ -290,6 +295,7 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
+
     delete:
       tags:
       - Model
@@ -308,6 +314,136 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
+
+  /model/newModel:
+    post:
+      tags:
+      - Model
+      summary: Create new model
+      operationId: create_model
+      parameters:
+      - name: id
+        in: query
+        description: the id representing the model
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: name
+        in: query
+        description: the name of the model being created
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: prediction
+        in: query
+        description: the name of the column you want predicted 
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: schema_id
+        in: query
+        description: the id of the schema collection you wish to use in order to generate the data needed for the model
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: version
+        in: query
+        description: the version of the model 
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelSchema'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+
+  /model/predictModel:
+    post:
+      tags:
+      - Model
+      summary: Output the prediction from one of the models
+      operationId: predict_model
+      parameters:
+      - name: model_name
+        in: query
+        description: the name of the model you wish to use
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: schema_id
+        in: query
+        description: the id of the model schema you wish to use
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictModel'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+
+  /model/trainModel:
+    post:
+      tags:
+      - Model
+      summary: Train one of the models
+      operationId: train_model
+      parameters:
+      - name: model_id
+        in: query
+        description: the id of the model you wish to use
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: collection_name
+        in: query
+        description: the name of the collection you wish to collect data from
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainingModelSchema'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
+
+
+
+
   /simulation:
     summary: Manages simulations
     get:
@@ -466,6 +602,66 @@ components:
         field: field
         datatype: datatype
         value: value
+
+
+    ModelSchema:
+      required:
+      - id
+      - name
+      - prediction
+      - schema_id
+      - version
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        prediction:
+          type: string
+        schema_id:
+          type: string
+        version:
+          type: integer
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        name: accepted flight prediction
+        prediction: accepted
+        schema_id: dI8m49ZU6M
+        version: 1
+
+
+    TrainingModelSchema:
+      required:
+      - model_id
+      - collection_name
+      type: object
+      properties:
+        model_id:
+          type: string
+        collection_name:
+          type: string
+      example:
+        model_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        collection_name: Flight
+
+    PredictModel:
+      required:
+      - model_name
+      - schema_id
+      type: object
+      properties:
+        model_name:
+          type: string
+        schema_id:
+          type: string
+      example:
+        model_name: flight number 1 model
+        schema_id: 05d3667c-b1d5-4b17-861e-f589b8c0e468 
+
+
+
+
   responses:
     ErrorResponse:
       description: Generic error response
@@ -489,4 +685,3 @@ components:
             User.ReadBasic.All: Ability to read user profile
       x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_OAuth2
       x-scopeValidateFunc: swagger_server.controllers.authorization_controller.validate_scope_OAuth2
-
