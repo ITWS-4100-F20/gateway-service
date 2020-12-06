@@ -25,8 +25,13 @@ def get_simulation(limit=None, id=None):  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
 
+    if(limit != None):
+        ##return most recent simulations
+        return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}, {"$limit": limit}]) ]
+
+
+    return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}]) ]
 
 def options_simulation():  # noqa: E501
     """Shows simulation types and options
@@ -56,14 +61,7 @@ def post_simulation(body):  # noqa: E501
     #may need to modify this response based on return type
 
     ret = proxyResponse.json()
-    print(ret)
     return ret 
-    
-    
-
-    #possible alternative
-    # return Response(proxyResponse.content, mimetype="application/json")
-
 
 
 def simulation_bids(id=None):  # noqa: E501
