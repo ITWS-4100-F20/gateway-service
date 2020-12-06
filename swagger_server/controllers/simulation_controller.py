@@ -5,6 +5,7 @@ from swagger_server.models.bid_event import BidEvent  # noqa: E501
 from swagger_server.models.compensation_summary import CompensationSummary  # noqa: E501
 from swagger_server.models.compensation_record import CompensationRecord
 from swagger_server.models.timeline_event import TimelineEvent  # noqa: E501
+from swagger_server.models.simulation_start import SimulationStart
 from swagger_server.models.volunteer import Volunteer  # noqa: E501
 from swagger_server.models.volunteer_details import VolunteerDetails  # noqa: E501
 from swagger_server import util
@@ -37,18 +38,18 @@ def options_simulation():  # noqa: E501
     return 'do some magic!'
 
 
-def post_simulation(name, id=None):  # noqa: E501
+def post_simulation(body):  # noqa: E501
     """Creates new simulation. Starts simulation if given id.
 
      # noqa: E501
 
-    :param name: name of scenario
-    :type name: str
-    :param id: id of existing simulation
-    :type id: str
+    :param body: 
+    :type body: dict | bytes
 
     :rtype: None
     """
+    if connexion.request.is_json:
+        body = SimulationStart.from_dict(connexion.request.get_json())  # noqa: E501
     return 'do some magic!'
 
 

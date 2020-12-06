@@ -479,23 +479,12 @@ paths:
       - Simulation
       summary: Creates new simulation. Starts simulation if given id.
       operationId: post_simulation
-      parameters:
-        - name: name
-          in: query
-          description: name of scenario
-          required: true
-          style: form
-          explode: true
-          schema:
-            type: string
-        - name: id
-          in: query
-          description: id of existing simulation
-          required: false
-          style: form
-          explode: true
-          schema:
-            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SimulationStart'
+        required: true
       responses:
         default:
           description: Default error sample response
@@ -967,6 +956,16 @@ components:
         comp_type: comp_type
         comp_id: 6
         vol_id: 1
+    SimulationStart:
+      type: object
+      properties:
+        scenarioId:
+          type: string
+        parameters:
+          type: string
+      example:
+        scenarioId: A
+        parameters: "NOT DONE"
     VolunteerDetails:
       type: object
       properties:
