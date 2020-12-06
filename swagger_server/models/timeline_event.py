@@ -14,7 +14,7 @@ class TimelineEvent(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, timestamp: str=None, event_type: str=None, details: object=None):  # noqa: E501
+    def __init__(self, time: str=None, event_type: str=None, details: object=None):  # noqa: E501
         """TimelineEvent - a model defined in Swagger
 
         :param timestamp: The timestamp of this TimelineEvent.  # noqa: E501
@@ -25,17 +25,17 @@ class TimelineEvent(Model):
         :type details: object
         """
         self.swagger_types = {
-            'timestamp': str,
+            'time': str,
             'event_type': str,
             'details': object
         }
 
         self.attribute_map = {
-            'timestamp': 'timestamp',
+            'time': 'time',
             'event_type': 'event_type',
             'details': 'details'
         }
-        self._timestamp = timestamp
+        self._time = time
         self._event_type = event_type
         self._details = details
 
@@ -58,7 +58,7 @@ class TimelineEvent(Model):
         :return: The timestamp of this TimelineEvent.
         :rtype: str
         """
-        return self._timestamp
+        return self._time
 
     @timestamp.setter
     def timestamp(self, timestamp: str):
@@ -71,7 +71,7 @@ class TimelineEvent(Model):
         if timestamp is None:
             raise ValueError("Invalid value for `timestamp`, must not be `None`")  # noqa: E501
 
-        self._timestamp = timestamp
+        self._time = time
 
     @property
     def event_type(self) -> str:
