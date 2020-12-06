@@ -1,6 +1,7 @@
 import connexion
 import six
-
+import requests
+from flask import Response
 from swagger_server.models.bid_event import BidEvent  # noqa: E501
 from swagger_server.models.compensation_summary import CompensationSummary  # noqa: E501
 from swagger_server.models.compensation_record import CompensationRecord
@@ -10,7 +11,7 @@ from swagger_server.models.volunteer import Volunteer  # noqa: E501
 from swagger_server.models.volunteer_details import VolunteerDetails  # noqa: E501
 from swagger_server import util
 from swagger_server.utils.database import client
-
+from swagger_server import app_config
 
 def get_simulation(limit=None, id=None):  # noqa: E501
     """Lists simulations with no id. With id it returns data for simulation
@@ -50,7 +51,13 @@ def post_simulation(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = SimulationStart.from_dict(connexion.request.get_json())  # noqa: E501
-    return 'do some magic!'
+    proxyResponse = requests.post(app_config.ANALYTICS_ENGINE_ENDPOINT, body)
+    #may need to modify this response based on return type
+    return proxyResponse
+
+    #possible alternative
+    # return Response(proxyResponse.content, mimetype="application/json")
+
 
 
 def simulation_bids(id=None):  # noqa: E501
