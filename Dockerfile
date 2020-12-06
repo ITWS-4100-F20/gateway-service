@@ -1,5 +1,8 @@
 FROM python:3-alpine
 
+RUN apk update && apk upgrade
+RUN apk add gcc musl-dev libffi-dev openssl-dev
+
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 

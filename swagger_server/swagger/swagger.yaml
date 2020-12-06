@@ -63,44 +63,6 @@ paths:
       x-swagger-router-controller: swagger_server.controllers.users_controller
       x-openapi-router-controller: swagger_server.controllers.users_controller
   /schema:
-    post:
-      tags:
-      - Schema
-      summary: Add data of scheme type with csv format.
-      operationId: post_schema_data
-      parameters:
-      - name: name
-        in: query
-        description: name of schema
-        required: true
-        style: form
-        explode: true
-        schema:
-          type: string
-      requestBody:
-        content:
-          text/plain:
-            schema:
-              type: string
-              example:
-                "cola,colb,colc\ntype1,type2,type3\ndata1,data2,data3\n..."
-                
-        required: true
-        description:
-          "First row is column names, second row is data types, remaining are rows of data"
-      responses:
-        "200":
-          description: Rows effected
-        "404":
-          description: Schema doesnt exist
-        "500":
-          description: Data is improper
-        default:
-          description: Default error sample response
-      security:
-      - OAuth2:
-        - User.ReadBasic.All
-      x-openapi-router-controller: swagger_server.controllers.schema_controller
     get:
       tags:
       - Data
@@ -117,6 +79,46 @@ paths:
                 items:
                   $ref: '#/components/schemas/DataSchema'
                 x-content-type: application/json
+        default:
+          description: Default error sample response
+      security:
+      - OAuth2:
+        - User.ReadBasic.All
+      x-openapi-router-controller: swagger_server.controllers.schema_controller
+    post:
+      tags:
+      - Schema
+      summary: Add data of scheme type with csv format.
+      operationId: post_schema_data
+      parameters:
+      - name: name
+        in: query
+        description: name of schema
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+      requestBody:
+        description: First row is column names, second row is data types, remaining
+          are rows of data
+        content:
+          text/plain:
+            schema:
+              type: string
+              example: |-
+                cola,colb,colc
+                type1,type2,type3
+                data1,data2,data3
+                ...
+        required: true
+      responses:
+        "200":
+          description: Rows affected
+        "404":
+          description: Schema doesnt exist
+        "500":
+          description: Data is improper
         default:
           description: Default error sample response
       security:
@@ -220,7 +222,7 @@ paths:
         required: true
       responses:
         "200":
-          description: Rows effected
+          description: Rows affected
         "404":
           description: Schema doesnt exist
         "500":
@@ -247,7 +249,7 @@ paths:
           type: string
       responses:
         "200":
-          description: Rows effected
+          description: Rows affected
           content:
             application/json:
               schema:
@@ -445,12 +447,29 @@ paths:
 
 
   /simulation:
-    summary: Manages simulations
+    summary: Retrieve simulations
     get:
       tags:
       - Simulation
       summary: Lists simulations with no id. With id it returns data for simulation
       operationId: get_simulation
+      parameters:
+      - name: limit
+        in: query
+        description: max amount of recent simulations to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
       responses:
         default:
           description: Default error sample response
@@ -460,6 +479,23 @@ paths:
       - Simulation
       summary: Creates new simulation. Starts simulation if given id.
       operationId: post_simulation
+      parameters:
+        - name: name
+          in: query
+          description: name of scenario
+          required: true
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: id
+          in: query
+          description: id of existing simulation
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
       responses:
         default:
           description: Default error sample response
@@ -470,6 +506,174 @@ paths:
       summary: Shows simulation types and options
       operationId: options_simulation
       responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /simulation/summary:
+    get:
+      tags:
+      - Simulation
+      summary: Retrieve summary details for a specific simulation
+      operationId: simulation_summary
+      parameters:
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Compensation summary
+          content:
+            application/json:
+              schema:
+                type: object
+                x-content-type: application/json
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /simulation/timeline:
+    get:
+      tags:
+      - Simulation
+      summary: View chronological list of events for a given simulation
+      operationId: simulation_timeline
+      parameters:
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Chronological list of events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimelineEvent'
+                x-content-type: application/json
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /simulation/volunteers:
+    get:
+      tags:
+      - Simulation
+      summary: View list of all volunteers for a given simulation
+      operationId: simulation_volunteers
+      parameters:
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: List of all customers who volunteered
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Volunteer'
+                x-content-type: application/json
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /simulation/bids:
+    get:
+      tags:
+      - Simulation
+      summary: View bid history for a given simulation
+      operationId: simulation_bids
+      parameters:
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Chronological list of bids
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BidEvent'
+                x-content-type: application/json
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /simulation/compensation:
+    get:
+      tags:
+      - Simulation
+      summary: View all compensation for a given simulation
+      operationId: simulation_compensation
+      parameters:
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Compensation summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompensationSummary'
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.simulation_controller
+  /simulation/passenger:
+    get:
+      tags:
+      - Simulation
+      summary: View simulation details for a given passenger
+      operationId: simulation_passenger
+      parameters:
+      - name: id
+        in: query
+        description: ID of simulation info you would like to retrieve
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: passengerid
+        in: query
+        description: ID of passenger
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Compensation summary
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VolunteerDetails'
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.simulation_controller
@@ -543,8 +747,8 @@ components:
         message: success
     DataSchema:
       required:
-      - id
       - fields
+      - id
       - name
       type: object
       properties:
@@ -602,8 +806,6 @@ components:
         field: field
         datatype: datatype
         value: value
-
-
     ModelSchema:
       required:
       - id
@@ -659,9 +861,160 @@ components:
         model_name: flight number 1 model
         schema_id: 05d3667c-b1d5-4b17-861e-f589b8c0e468 
 
-
-
-
+    TimelineEvent:
+      required:
+      - event_type
+      - timestamp
+      type: object
+      properties:
+        timestamp:
+          type: string
+        event_type:
+          type: string
+        details:
+          type: object
+      example:
+        timestamp: 2020-05-05T19:46:12.912Z
+        event_type: CHECK_IN
+        details:
+          name: DOE/JOHN
+    Volunteer:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        fin_dest:
+          type: string
+        cabin:
+          type: string
+        vol_method:
+          type: string
+        processed:
+          type: boolean
+      example:
+        id: 11788967
+        name: BETANCOURT/CRISTINA
+        fin_dest: IAH
+        cabin: "Y"
+        vol_method: WEB
+        processed: false
+    BidEvent:
+      type: object
+      properties:
+        bid_id:
+          type: integer
+        vol_id:
+          type: integer
+        vol_name:
+          type: string
+        timestamp:
+          type: string
+        etc_comp:
+          type: integer
+        miles_comp:
+          type: integer
+        initiated_by:
+          type: string
+          enum:
+          - USER
+          - AGENT
+        accepted:
+          type: boolean
+      example:
+        bid_id: 361736
+        vol_id: 11788967
+        vol_name: BETANCOURT/CRISTINA
+        timestamp: 2020-05-05T19:46:12.912Z
+        etc_comp: 100
+        miles_comp: 5000
+        initated_by: AGENT
+        accepted: true
+    CompensationSummary:
+      type: object
+      properties:
+        total_comp:
+          type: integer
+        comp_list:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompensationRecord'
+      example:
+        comp_list:
+        - comp_amount: 5
+          comp_type: comp_type
+          comp_id: 6
+          vol_id: 1
+        - comp_amount: 5
+          comp_type: comp_type
+          comp_id: 6
+          vol_id: 1
+        total_comp: 0
+    CompensationRecord:
+      type: object
+      properties:
+        comp_id:
+          type: integer
+        vol_id:
+          type: integer
+        comp_type:
+          type: string
+        comp_amount:
+          type: integer
+      example:
+        comp_amount: 5
+        comp_type: comp_type
+        comp_id: 6
+        vol_id: 1
+    VolunteerDetails:
+      type: object
+      properties:
+        vol_info:
+          $ref: '#/components/schemas/Volunteer'
+        bid_history:
+          type: array
+          items:
+            $ref: '#/components/schemas/BidEvent'
+        compensation:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompensationRecord'
+      example:
+        bid_history:
+        - bid_id: 361736
+          vol_id: 11788967
+          vol_name: BETANCOURT/CRISTINA
+          timestamp: 2020-05-05T19:46:12.912Z
+          etc_comp: 100
+          miles_comp: 5000
+          initated_by: AGENT
+          accepted: true
+        - bid_id: 361736
+          vol_id: 11788967
+          vol_name: BETANCOURT/CRISTINA
+          timestamp: 2020-05-05T19:46:12.912Z
+          etc_comp: 100
+          miles_comp: 5000
+          initated_by: AGENT
+          accepted: true
+        compensation:
+        - comp_amount: 5
+          comp_type: comp_type
+          comp_id: 6
+          vol_id: 1
+        - comp_amount: 5
+          comp_type: comp_type
+          comp_id: 6
+          vol_id: 1
+        vol_info:
+          id: 11788967
+          name: BETANCOURT/CRISTINA
+          fin_dest: IAH
+          cabin: "Y"
+          vol_method: WEB
+          processed: false
+          
   responses:
     ErrorResponse:
       description: Generic error response

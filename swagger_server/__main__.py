@@ -1,6 +1,5 @@
 import connexion
 import os
-import msal
 from flask_cors import CORS
 from flask_session import Session 
 from swagger_server import encoder
