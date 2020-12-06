@@ -3,7 +3,7 @@ import six
 from sklearn.neural_network import MLPClassifier
 from swagger_server import util
 from swagger_server.utils.database import client
-
+import json
 import pymongo
 import numpy
 import pickle
@@ -21,6 +21,8 @@ def flatten(data:list):
                 rowdata[point["field"]] = int(point["value"])
             elif point["datatype"] == "float":
                 rowdata[point["field"]] = float(point["value"])
+            elif point["datatype"] == "bool":
+                rowdata[point["field"]] = bool(point["value"])
         res.append(rowdata)
     return res
 
@@ -141,7 +143,6 @@ def train_model(body, model_id, collection_name):  # noqa: E501
         x_value = []
         for i in col:
             if i == predict_title:
-                print(i)
                 if is_number(col[i]) == False:
                     if col[i] not in prediction:
                         prediction[col[i]] = prediction_value
@@ -155,8 +156,9 @@ def train_model(body, model_id, collection_name):  # noqa: E501
         x.append(x_value)
     y = numpy.array(y)
     x = numpy.array(x)
-    
+    print(x.shape)
     y = y.reshape(-1,1)
+    print(y.shape)
     for z in my_model:
         model = pickle.loads(z["model"])
         model.fit(x,y)
@@ -172,6 +174,47 @@ def predict_model(body, model_name, schema_id):
     #Ther is something in scikit learn that can just return the probabilities. RETURN JUST THAT
     print("The model name is:",model_name)
     print("The schema_id is:",schema_id)
+    db = new_client["simulation_data"]
+    prediction_title = ""
+    model_db = db["model"]
+    #my_model = model_db.find({"name": model_name})
+    version = 0
+    for f in model_db.find({},{"name": model_name,"prediction":1,"version":1}):
+        if f["version"] > version:
+            version = f["version"]
+            prediction_title = f["prediction"]
+    my_model = model_db.find({"version": version})
+    #print(prediction)
+    for x in my_model:
+        model = pickle.loads(x['model'])
+
+    collection = db[schema_id].find().sort("_id")
+    flatten_collection = flatten(collection)
+    x = []
+    for col in flatten_collection:
+        #print(col[predict_title])
+        x_value = []
+        for i in col:
+            if i == prediction_title:
+                continue
+            else:
+                x_value.append(float(col[i]))
+        x.append(x_value)
+
+    x = numpy.array(x)
+    #print(x.shape)
+
+
+
+    pred_val = model.predict_proba(x)
+    result = pred_val.tolist()
+    resulting_set = set()
+    for l in result:
+        for item in l:
+            resulting_set.add(item)
+    return json.dumps(list(resulting_set))
+
+    '''
     tmp = new_client["simulation_data"]
     tmpcol = tmp["model"]
     my_model = tmpcol.find({"id": schema_id})
@@ -179,6 +222,7 @@ def predict_model(body, model_name, schema_id):
         model = pickle.loads(x['model'])
     prediction = model.predict([[2., 2.], [-1., -2.]])
     print("PREDICTION:",prediction)
+    '''
     return 'do some magic!'
     
 
