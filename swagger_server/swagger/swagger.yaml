@@ -469,7 +469,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       responses:
         default:
           description: Default error sample response
@@ -523,7 +523,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       responses:
         "200":
           description: Compensation summary
@@ -549,7 +549,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       responses:
         "200":
           description: Chronological list of events
@@ -577,7 +577,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       responses:
         "200":
           description: List of all customers who volunteered
@@ -605,7 +605,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       responses:
         "200":
           description: Chronological list of bids
@@ -633,7 +633,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       responses:
         "200":
           description: Compensation summary
@@ -658,7 +658,7 @@ paths:
         style: form
         explode: true
         schema:
-          type: integer
+          type: string
       - name: passengerid
         in: query
         description: ID of passenger
@@ -864,17 +864,17 @@ components:
     TimelineEvent:
       required:
       - event_type
-      - timestamp
+      - time
       type: object
       properties:
-        timestamp:
+        time:
           type: string
         event_type:
           type: string
         details:
           type: object
       example:
-        timestamp: 2020-05-05T19:46:12.912Z
+        time: 2020-05-05T19:46:12.912Z
         event_type: CHECK_IN
         details:
           name: DOE/JOHN

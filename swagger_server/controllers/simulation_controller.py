@@ -3,10 +3,12 @@ import six
 
 from swagger_server.models.bid_event import BidEvent  # noqa: E501
 from swagger_server.models.compensation_summary import CompensationSummary  # noqa: E501
+from swagger_server.models.compensation_record import CompensationRecord
 from swagger_server.models.timeline_event import TimelineEvent  # noqa: E501
 from swagger_server.models.volunteer import Volunteer  # noqa: E501
 from swagger_server.models.volunteer_details import VolunteerDetails  # noqa: E501
 from swagger_server import util
+from swagger_server.utils.database import client
 
 
 def get_simulation(limit=None, id=None):  # noqa: E501
@@ -60,7 +62,11 @@ def simulation_bids(id=None):  # noqa: E501
 
     :rtype: List[BidEvent]
     """
-    return 'do some magic!'
+    bids = []
+    for bid in dict(client["simulation_data"]["Simulation-Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]:
+        for b in bid["bid_history"]:
+            bids.append(b)
+    return [BidEvent.from_dict(b) for b in bids]
 
 
 def simulation_compensation(id=None):  # noqa: E501
@@ -73,7 +79,14 @@ def simulation_compensation(id=None):  # noqa: E501
 
     :rtype: CompensationSummary
     """
-    return 'do some magic!'
+    comps = []
+    total = 0
+    for vol in dict(client["simulation_data"]["Simulation-Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]:
+        for comp in vol["compensation"]:
+            comps.append(comp)
+            total += comp["comp_amount"]
+    return CompensationSummary.from_dict({"comp_list" : comps, "total_comp": total})
+    
 
 
 def simulation_passenger(id=None, passengerid=None):  # noqa: E501
@@ -114,7 +127,7 @@ def simulation_timeline(id=None):  # noqa: E501
 
     :rtype: List[TimelineEvent]
     """
-    return 'do some magic!'
+    return [TimelineEvent.from_dict(i) for i in dict(client["simulation_data"]["Simulation-Events"].find_one({"sim_id" : id},{"_id":False}))["event_list"]]
 
 
 def simulation_volunteers(id=None):  # noqa: E501
@@ -127,4 +140,4 @@ def simulation_volunteers(id=None):  # noqa: E501
 
     :rtype: List[Volunteer]
     """
-    return 'do some magic!'
+    return [VolunteerDetails.from_dict(i) for i in dict(client["simulation_data"]["Simulation-Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]]
