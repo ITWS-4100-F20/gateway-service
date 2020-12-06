@@ -8,3 +8,4 @@ msal>=0.6.1,<2
 flask-cors == 3.0.9
 pyjwt[crypto]==1.7.1
 pymongo==3.11.0
+sklearn>=-0.23
