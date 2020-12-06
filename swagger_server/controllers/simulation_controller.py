@@ -71,7 +71,7 @@ def simulation_bids(id=None):  # noqa: E501
     :rtype: List[BidEvent]
     """
     bids = []
-    for bid in dict(client["simulation_data"]["Simulation-Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]:
+    for bid in dict(client["simulation_data"]["Simulation_Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]:
         for b in bid["bid_history"]:
             bids.append(b)
     return [BidEvent.from_dict(b) for b in bids]
@@ -89,7 +89,7 @@ def simulation_compensation(id=None):  # noqa: E501
     """
     comps = []
     total = 0
-    for vol in dict(client["simulation_data"]["Simulation-Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]:
+    for vol in dict(client["simulation_data"]["Simulation_Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]:
         for comp in vol["compensation"]:
             comps.append(comp)
             total += comp["comp_amount"]
@@ -135,7 +135,7 @@ def simulation_timeline(id=None):  # noqa: E501
 
     :rtype: List[TimelineEvent]
     """
-    return [TimelineEvent.from_dict(i) for i in dict(client["simulation_data"]["Simulation-Events"].find_one({"sim_id" : id},{"_id":False}))["event_list"]]
+    return [TimelineEvent.from_dict(i) for i in dict(client["simulation_data"]["Simulation_Events"].find_one({"sim_id" : id},{"_id":False}))["event_list"]]
 
 
 def simulation_volunteers(id=None):  # noqa: E501
@@ -148,4 +148,4 @@ def simulation_volunteers(id=None):  # noqa: E501
 
     :rtype: List[Volunteer]
     """
-    return [VolunteerDetails.from_dict(i) for i in dict(client["simulation_data"]["Simulation-Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]]
+    return [VolunteerDetails.from_dict(i) for i in dict(client["simulation_data"]["Simulation_Volunteers"].find_one({"sim_id" : id},{"_id":False}))["vol_list"]]
