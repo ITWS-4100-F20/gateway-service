@@ -35,11 +35,15 @@ def options_simulation():  # noqa: E501
     return 'do some magic!'
 
 
-def post_simulation():  # noqa: E501
+def post_simulation(name, id=None):  # noqa: E501
     """Creates new simulation. Starts simulation if given id.
 
      # noqa: E501
 
+    :param name: name of scenario
+    :type name: str
+    :param id: id of existing simulation
+    :type id: str
 
     :rtype: None
     """
