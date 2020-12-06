@@ -25,13 +25,16 @@ def get_simulation(limit=None, id=None):  # noqa: E501
 
     :rtype: None
     """
-
     if(limit != None):
+        if id != None:
+            return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{"$match" : {"id": id}},{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}, {"$limit": limit}]) ]
         ##return most recent simulations
         return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}, {"$limit": limit}]) ]
+    else:
+        if id != None:
+            return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{"$match" : {"id": id}},{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}]) ]
 
-
-    return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}]) ]
+        return [dict(i) for i in client["simulation_data"]["Simulations"].aggregate([{ "$sort": { "_id": -1 } },{ "$project":{"_id": False}}]) ]
 
 def options_simulation():  # noqa: E501
     """Shows simulation types and options
