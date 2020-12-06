@@ -962,10 +962,7 @@ components:
         scenarioId:
           type: string
         parameters:
-          type: string
-      example:
-        scenarioId: A
-        parameters: "NOT DONE"
+          type: object
     VolunteerDetails:
       type: object
       properties:

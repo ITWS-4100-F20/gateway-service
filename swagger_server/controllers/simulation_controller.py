@@ -51,9 +51,15 @@ def post_simulation(body):  # noqa: E501
     """
     if connexion.request.is_json:
         body = SimulationStart.from_dict(connexion.request.get_json())  # noqa: E501
-    proxyResponse = requests.post(app_config.ANALYTICS_ENGINE_ENDPOINT, body)
+        
+    proxyResponse = requests.post(app_config.ANALYTICS_ENGINE_ENDPOINT+"/simulation", json=connexion.request.get_json())
     #may need to modify this response based on return type
-    return proxyResponse
+
+    ret = proxyResponse.json()
+    print(ret)
+    return ret 
+    
+    
 
     #possible alternative
     # return Response(proxyResponse.content, mimetype="application/json")
