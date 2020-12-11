@@ -51,7 +51,7 @@ def define_model(body):  # noqa: E501
     if connexion.request.is_json:
         body = ModelDefinition.from_dict(connexion.request.get_json())  # noqa: E501
 
-    proxyResponse = requests.post(app_config.ANALYTICS_ENGINE_ENDPOINT+"/simulation", json=connexion.request.get_json())
+    proxyResponse = requests.post(app_config.ANALYTICS_ENGINE_ENDPOINT+"/modelDefinition", json=connexion.request.get_json())
     #may need to modify this response based on return type
 
     ret = proxyResponse.json()
