@@ -263,11 +263,8 @@ paths:
       - OAuth2:
         - User.ReadBasic.All
       x-openapi-router-controller: swagger_server.controllers.data_controller
-
-
   /model:
     summary: Controls models
-
     get:
       tags:
       - Model
@@ -286,8 +283,6 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
-
-
     post:
       tags:
       - Model
@@ -297,7 +292,6 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
-
     delete:
       tags:
       - Model
@@ -316,7 +310,6 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
-
   /model/newModel:
     post:
       tags:
@@ -342,7 +335,7 @@ paths:
           type: string
       - name: prediction
         in: query
-        description: the name of the column you want predicted 
+        description: the name of the column you want predicted
         required: true
         style: form
         explode: true
@@ -350,7 +343,8 @@ paths:
           type: string
       - name: schema_id
         in: query
-        description: the id of the schema collection you wish to use in order to generate the data needed for the model
+        description: the id of the schema collection you wish to use in order to generate
+          the data needed for the model
         required: true
         style: form
         explode: true
@@ -358,7 +352,7 @@ paths:
           type: string
       - name: version
         in: query
-        description: the version of the model 
+        description: the version of the model
         required: true
         style: form
         explode: true
@@ -374,7 +368,6 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
-
   /model/predictModel:
     post:
       tags:
@@ -408,7 +401,6 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
-
   /model/trainModel:
     post:
       tags:
@@ -442,10 +434,22 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.model_controller
-
-
-
-
+  /model/definition:
+    post:
+      tags:
+      - Model
+      summary: Creates new model definition
+      operationId: define_model
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelDefinition'
+        required: true
+      responses:
+        default:
+          description: Default error sample response
+      x-openapi-router-controller: swagger_server.controllers.model_controller
   /simulation:
     summary: Retrieve simulations
     get:
@@ -820,12 +824,10 @@ components:
         prediction: accepted
         schema_id: dI8m49ZU6M
         version: 1
-
-
     TrainingModelSchema:
       required:
-      - model_id
       - collection_name
+      - model_id
       type: object
       properties:
         model_id:
@@ -835,7 +837,6 @@ components:
       example:
         model_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
         collection_name: Flight
-
     PredictModel:
       required:
       - model_name
@@ -848,8 +849,7 @@ components:
           type: string
       example:
         model_name: flight number 1 model
-        schema_id: 05d3667c-b1d5-4b17-861e-f589b8c0e468 
-
+        schema_id: 05d3667c-b1d5-4b17-861e-f589b8c0e468
     TimelineEvent:
       required:
       - event_type
@@ -863,7 +863,7 @@ components:
         details:
           type: object
       example:
-        time: 2020-05-05T19:46:12.912Z
+        time: {}
         event_type: CHECK_IN
         details:
           name: DOE/JOHN
@@ -915,7 +915,7 @@ components:
         bid_id: 361736
         vol_id: 11788967
         vol_name: BETANCOURT/CRISTINA
-        timestamp: 2020-05-05T19:46:12.912Z
+        timestamp: {}
         etc_comp: 100
         miles_comp: 5000
         initated_by: AGENT
@@ -981,7 +981,7 @@ components:
         - bid_id: 361736
           vol_id: 11788967
           vol_name: BETANCOURT/CRISTINA
-          timestamp: 2020-05-05T19:46:12.912Z
+          timestamp: {}
           etc_comp: 100
           miles_comp: 5000
           initated_by: AGENT
@@ -989,7 +989,7 @@ components:
         - bid_id: 361736
           vol_id: 11788967
           vol_name: BETANCOURT/CRISTINA
-          timestamp: 2020-05-05T19:46:12.912Z
+          timestamp: {}
           etc_comp: 100
           miles_comp: 5000
           initated_by: AGENT
@@ -1010,7 +1010,25 @@ components:
           cabin: "Y"
           vol_method: WEB
           processed: false
-          
+    ModelDefinition:
+      type: object
+      properties:
+        def_name:
+          type: string
+        data_schema_name:
+          type: string
+        passenger_target:
+          type: string
+        comp_target:
+          type: string
+        ignore_pass:
+          type: array
+          items:
+            type: string
+        ignore_comp:
+          type: array
+          items:
+            type: string
   responses:
     ErrorResponse:
       description: Generic error response
@@ -1034,3 +1052,4 @@ components:
             User.ReadBasic.All: Ability to read user profile
       x-tokenInfoFunc: swagger_server.controllers.authorization_controller.check_OAuth2
       x-scopeValidateFunc: swagger_server.controllers.authorization_controller.validate_scope_OAuth2
+

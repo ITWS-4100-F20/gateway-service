@@ -7,10 +7,11 @@ import json
 import pymongo
 import numpy
 import pickle
+import requests
 from swagger_server import app_config
 new_client = pymongo.MongoClient(app_config.MONGO_CONNECTION_STRING)
 
-
+from swagger_server.models.model_definition import ModelDefinition  # noqa: E501
 def flatten(data:list):
     res = []
     for row in data:
@@ -36,6 +37,25 @@ def delete_model():  # noqa: E501
     :rtype: None
     """
     return 'do some magic!'
+
+def define_model(body):  # noqa: E501
+    """Creates new model definition
+
+     # noqa: E501
+
+    :param body: 
+    :type body: dict | bytes
+
+    :rtype: None
+    """
+    if connexion.request.is_json:
+        body = ModelDefinition.from_dict(connexion.request.get_json())  # noqa: E501
+
+    proxyResponse = requests.post(app_config.ANALYTICS_ENGINE_ENDPOINT+"/simulation", json=connexion.request.get_json())
+    #may need to modify this response based on return type
+
+    ret = proxyResponse.json()
+    return ret 
 
 
 def get_model():  # noqa: E501
