@@ -76,7 +76,7 @@ def post_add_data(body, name):  # noqa: E501
         body = Data.from_dict(connexion.request.get_json())  # noqa: E501
 
     db = client["simulation_data"]
-    if db["schema"].find_one({"name": name}) is not None:
+    if db["Schema"].find_one({"name": name}) is not None:
         coll = db[name]
         coll.insert_many([i.to_dict() for i in body.data])
     else:
@@ -99,9 +99,9 @@ def put_add_scheme(body):  # noqa: E501
         body = DataSchema.from_dict(connexion.request.get_json())  # noqa: E501
 
     database = client["simulation_data"]
-    if database["schema"].find_one({"name": body.name}) is None:
+    if database["Schema"].find_one({"name": body.name}) is None:
         newcol = database[body.name]
-        schema = database["schema"]
+        schema = database["Schema"]
         schema.insert_one(body.to_dict())
     else:
         return 'Schema NAME Exists', 400

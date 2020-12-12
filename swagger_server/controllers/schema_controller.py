@@ -17,7 +17,7 @@ def get_data_schemes():  # noqa: E501
 
     :rtype: List[DataSchema]
     """
-    schema = [DataSchema.from_dict(dict(i)) for i in client["simulation_data"]["schema"].find()]
+    schema = [DataSchema.from_dict(dict(i)) for i in client["simulation_data"]["Schema"].find()]
     return schema
 
 def data_maker(body):

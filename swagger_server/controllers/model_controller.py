@@ -145,7 +145,7 @@ def train_model(body, model_id, collection_name):  # noqa: E501
     #print("The collection name for the data is:",collection_name)
     db = new_client["simulation_data"]
     collection = db[collection_name].find().sort("_id")
-    model_db = db["model"]
+    model_db = db["Models"]
     my_model = model_db.find({"id": model_id})
     version = 0
     for f in model_db.find({},{"id": model_id,"prediction":1,"version":1}):
@@ -180,7 +180,7 @@ def train_model(body, model_id, collection_name):  # noqa: E501
     y = y.reshape(-1,1)
     print(y.shape)
     for z in my_model:
-        model = pickle.loads(z["model"])
+        model = pickle.loads(z["Models"])
         model.fit(x,y)
         version = z["version"] + 1
 
@@ -196,7 +196,7 @@ def predict_model(body, model_name, schema_id):
     print("The schema_id is:",schema_id)
     db = new_client["simulation_data"]
     prediction_title = ""
-    model_db = db["model"]
+    model_db = db["Models"]
     #my_model = model_db.find({"name": model_name})
     version = 0
     for f in model_db.find({},{"name": model_name,"prediction":1,"version":1}):
@@ -206,7 +206,7 @@ def predict_model(body, model_name, schema_id):
     my_model = model_db.find({"version": version})
     #print(prediction)
     for x in my_model:
-        model = pickle.loads(x['model'])
+        model = pickle.loads(x['Models'])
 
     collection = db[schema_id].find().sort("_id")
     flatten_collection = flatten(collection)

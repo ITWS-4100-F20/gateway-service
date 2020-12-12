@@ -19,7 +19,7 @@ def get_scenario():  # noqa: E501
     :rtype: None
     """
 
-    scenarios = [i for i in client["simulation_data"]["scenarios"].find({}, { "_id": False })] 
+    scenarios = [i for i in client["simulation_data"]["Scenarios"].find({}, { "_id": False })] 
     print(scenarios)
     return scenarios
 
@@ -32,5 +32,5 @@ def post_scenario():  # noqa: E501
 
     :rtype: None
     """
-    client["simulation"]["scenario"].insert_one(connexion.request.get_json())
+    client["simulation"]["Scenario"].insert_one(connexion.request.get_json())
     return 'ok', 200
