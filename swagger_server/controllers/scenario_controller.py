@@ -32,4 +32,5 @@ def post_scenario():  # noqa: E501
 
     :rtype: None
     """
-    return 'do some magic!'
+    client["simulation"]["scenario"].insert_one(connexion.request.get_json())
+    return 'ok', 200

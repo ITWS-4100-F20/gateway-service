@@ -23,8 +23,6 @@ tags:
   description: Control and status of simulations
 - name: Scenario
   description: Defines and controls a scenario
-- name: Bid
-  description: Endpoints for the prototype interface
 paths:
   /ping:
     get:
@@ -690,26 +688,6 @@ paths:
         default:
           description: Default error sample response
       x-openapi-router-controller: swagger_server.controllers.scenario_controller
-  /bid:
-    summary: Controls bidding
-    get:
-      tags:
-      - Bid
-      summary: Gets current bid estimate and data with user id.
-      operationId: get_bid
-      responses:
-        default:
-          description: Default error sample response
-      x-openapi-router-controller: swagger_server.controllers.bid_controller
-    post:
-      tags:
-      - Bid
-      summary: Posts bid to server. Returns accepted or denied states.
-      operationId: post_bid
-      responses:
-        default:
-          description: Default error sample response
-      x-openapi-router-controller: swagger_server.controllers.bid_controller
 components:
   schemas:
     Error:
