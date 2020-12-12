@@ -247,16 +247,6 @@ def predict_model(body, model_name, schema_id):
     
 
 
-def put_model():  # noqa: E501
-    """Adds new model
-
-     # noqa: E501
-
-
-    :rtype: None
-    """
-    return 'do some magic!'
-
 
 '''
 Use this link to access the API: http://localhost:3030/api/ui/#/Data
